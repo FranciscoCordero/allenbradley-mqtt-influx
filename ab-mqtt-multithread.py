@@ -19,20 +19,19 @@
 # libraries
 ###########
 from pylogix import PLC
-import paho.mqtt.client as paho
 from csv import reader
 import time
 from datetime import datetime
 from threading import Thread
 from queue import Queue
-from influxdb_client import InfluxDBClient, Point
+from influxdb_client_3 import InfluxDBClient3, Point
 
 
 # Settings
 ###########
 
 # Allen Bradley PLC IP
-plc_ip = "aaa.bbb.ccc.ddd"
+plc_ip = "192.168.1.1"
 
 # Read every x seconds:
 read_s = 1
@@ -43,30 +42,19 @@ ths = 4
 # batch size for PLC value reading
 n = 50
 
-# MQTT Broker IP
-broker_address = "127.0.0.1"
-
-# Name of MQTT topic for publishing all values (independent if they changed from last read cycle)
-ab_all = "ab_all"
-ab_all_active = False
-
-# Name of MQTT topic for publishing only values which changed from last cycle
-ab_changed = "ab_changed"
-ab_changed_active = True
-
 # Filename with list of PLC addresses to read
 filename = "plc_adresses.csv"
 
 # Influx
-write_to_influx = False
+write_to_influx = True
 
-username = '<username>'
-password = '<password>'
+token = 'RKkWjCpKt0kJFquZoZCEp3D824k2Qu07MjvMSxBRX35h0RgPVQzmok6kud2ktbKNzD6tHIaD85RCTTbJf5xYhg=='
+org = 'utevez4@gmail.com'
+host = 'https://us-west-2-2.aws.cloud2.influxdata.com'
 
-database = 'ab'
-retention_policy = 'autogen'
+database = 'plc_tags'
 
-bucket = f'{database}/{retention_policy}'
+bucket = database
 
 # read list of PLC adresses to read
 def read_addresses(filename):
@@ -116,7 +104,7 @@ def read_values(msec, ad, comm, lvalues, mq, mqc, lq, n, iapi):
                 if write_to_influx:
                     x = r.TagName.split('.')
                     point = Point(x[0]).field(x[1], r.Value)
-                    iapi.write(bucket=bucket, record=point)
+                    iapi.write(database=bucket, record=point)
            
             # store values for next read run
             lvalues[r.TagName] = r.Value
@@ -134,14 +122,10 @@ def main():
     last_values = {}
     end = datetime
 
-    # MQTT Settings all values
-    client = paho.Client("ab")
-    client.connect(broker_address)
-
     # Create Influx Client
     if write_to_influx:    
-        influx = InfluxDBClient(url='http://localhost:8086', token=f'{username}:{password}', org='-')
-        influx_api = influx.write_api()
+        influx = InfluxDBClient3(host=host, token=token, org=org)
+        influx_api = influx
     else:
         influx_api = ''
 
@@ -209,13 +193,6 @@ def main():
             # merge last values from all threads
             for i in range(last_queue.qsize()):
                 ld.update(last_queue.get()) 
-
-            # Publich to two different topics
-            if ab_all_active:
-                client.publish(ab_all,payload=msg,qos=0)
-            
-            if ab_changed_active:
-                client.publish(ab_changed,payload=msg_changes,qos=0)
             
             # Loop ended, all adresses are read and published    
             end = datetime.now()
@@ -238,9 +215,7 @@ def main():
         except KeyboardInterrupt:
             print('\n Program exiting')
             read = False
-            client.disconnect()
-            influx_api.close()
             
 if __name__ == "__main__":
-    print('\n\nAllen Bradley - MQTT publisher started!\n#######################################\n\n\n')
+    print('Starting...')
     main()
