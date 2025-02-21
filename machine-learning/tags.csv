@@ -2,6 +2,7 @@ TAGS, DESCRIPCION
 CV1801.VALUE,Valvula Gas
 TT1501Pid.PID_SpRtn,Setpoint Intercambiador
 DeltaTPid.Pid_SP,Setpoint Delta T Freidor
+MSC1600.SPSEgu, Velocidad Bomba Principal
 MSC1504.SPSEgu,Velocidad Cinta Sumergidor Freidor
 MSC1505.SPSEgu,Velocidad Cinta Salida Freidor
 MSC1503.SPSEgu,Velocidad Paletas Freidor
