@@ -1,0 +1,22 @@
+TAGS, DESCRIPCION
+CV1801.VALUE,Valvula Gas
+TT1501Pid.PID_SpRtn,Setpoint Intercambiador
+DeltaTPid.Pid_SP,Setpoint Delta T Freidor
+MSC1504.SPSEgu,Velocidad Cinta Sumergidor Freidor
+MSC1505.SPSEgu,Velocidad Motor Cinta Salida Freidor
+MSC1503.SPSEgu,Velocidad Paletas Freidor
+MSC1301.SPSEgu,Velocidad Banda Inclinada Rebanadoras
+MSC1001.SPSEgu,Velocidad Tolva Primaria
+MSC1600.SPSEgu,Velocidad Bomba Principal Aceite
+LT1503.Value,Sensor Nivel Aceite
+LT1301.Value,Sensor Nivel Banda Tolva
+TT1501.Value,Sensor Temp Salida Intercambiador
+TT1502.Value,Sensor Temp Entrada Intercambiador
+FT1501.Value,Sensor Flujo Actual Aceite
+Pc_OIT_24Real[290],Sensor Temperatura Chimenea
+Pc_OIT_24Real[291],Sensor Temperatura Camara Intercambiador
+Pc_OIT_24Real[000],Humedad Actual
+Pc_OIT_24Real[001],Nivel Aceite Actual, antiguamente LT1503
+Pc_OIT_Dint[029],Solidos Papa Actual
+Pc_OIT_24Real[037],Velocidad Salida Cinta Freidor kgs/h, calculo que hace el PLC para saber cuantos kgs/h de papa se producen.
+Pc_OIT_24Real[004],Velocidad Maestra Freidor
